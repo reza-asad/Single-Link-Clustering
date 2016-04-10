@@ -15,7 +15,7 @@ def single_link_clustering(edges_costs, num_nodes, k):
         print "The number of nodes is smaller than k"
         return None
     i = 0
-    while num_clusters != k:
+    while num_clusters != k-1:
         # Find the leaders for the two nodes involved in the edge
         leader1 = clusters.find(edges_costs[i][0])
         leader2 = clusters.find(edges_costs[i][1])
@@ -24,14 +24,7 @@ def single_link_clustering(edges_costs, num_nodes, k):
             clusters.fuse(leader1, leader2)
             num_clusters -= 1
         i+=1
-    # Now that there the k clusters are found return the max-spacing
-    while True:
-        leader1 = clusters.find(edges_costs[i][0])
-        leader2 = clusters.find(edges_costs[i][1])
-        # If the nodes belong to different clusters the cost the max-spacing
-        if leader1 != leader2:
-            return edges_costs[i][2]
-        i += 1
+    return edges_costs[i-1][2]
 
 # Union_find data structure 
 class union_find():
@@ -62,7 +55,7 @@ class union_find():
 # each tuple contains the connected nodes and the
 # edge cost
 edges_costs = []
-data_file = open('data.txt')
+data_file = open('simple_graph.txt')
 num_nodes = int(next(data_file))
 nodes = set()
 for line in data_file:
