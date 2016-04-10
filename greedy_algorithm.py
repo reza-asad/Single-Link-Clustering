@@ -4,6 +4,9 @@
 # A greedy algrithm that finds the max-spacing k clusters
 # We assume the input graph is complete.
 def single_link_clustering(edges_costs, num_nodes, k):
+    if  k <= 1:
+        print 'max_spacing in for k={} does not make sense'.format(k)
+        return None
     num_clusters = num_nodes
     nodes = range(1,num_nodes+1)
     nodes_leader_dict = dict(zip(nodes, nodes))
