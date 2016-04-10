@@ -1,8 +1,6 @@
 # Reza Asad
 # March 6th, 2016
 ######################### Algorithms ########################
-from collections import defaultdict
-
 # A greedy algrithm that finds the max-spacing k clusters
 # We assume the input graph is complete.
 def single_link_clustering(edges_costs, num_nodes, k):
