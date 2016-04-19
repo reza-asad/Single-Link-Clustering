@@ -35,6 +35,7 @@ class union_find():
         self.node_to_leader = node_to_leader
         cluster_nodes = [[i] for i in node_to_leader.iterkeys()]
         self.leader_to_node = dict(zip(node_to_leader.iterkeys(), cluster_nodes))
+        self.num_clusters = len(node_to_leader)
     # Finds the leader of a node
     def find(self, node):
         return self.node_to_leader[node]
@@ -45,6 +46,7 @@ class union_find():
                 self.node_to_leader[node] = leader2
             self.leader_to_node[leader2] += c1
             self.leader_to_node[leader1] = None
+            self.num_clusters -= 1
         cluster1 = self.leader_to_node[leader1]
         cluster2 = self.leader_to_node[leader2]
         if len(cluster1) < len(cluster2):
