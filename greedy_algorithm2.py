@@ -13,8 +13,10 @@ def find_num_clust(nodes, num_bits, max_spacing):
         for index in indices:
             list_node = list(node)
             for val in index:
-                list_node[val] = list_node[val].replace('0','1')
-                list_node[val] = list_node[val].replace('1','0')
+                if list_node[val] == '0':
+                    list_node[val] = list_node[val].replace('0','1')
+                else:
+                    list_node[val] = list_node[val].replace('1','0')
             altered = "".join(list_node)
             altered_nodes.append(altered)
         return altered_nodes
@@ -26,13 +28,13 @@ def find_num_clust(nodes, num_bits, max_spacing):
             altered_nodes = alter(node,j)
             for altered in altered_nodes:
                 if altered in nodes:
+                    # print 231321312321
                     leader1 = clusters.find(int(node,2))
                     leader2 = clusters.find(int(altered,2))
                     if leader1 != leader2:
                         clusters.fuse(leader1, leader2)
-                        num_clusters -= 1
-    return num_clusters
-
+                        
+    return len(set(clusters.node_to_leader.values()))
 ######################## Main ###############################
 # Preprocess the data
 data_file = open('huge_graph.txt')
@@ -40,7 +42,12 @@ first_row = next(data_file).split()
 num_nodes = int(first_row[0])
 num_bits = int(first_row[1])
 nodes = set()
+i = 0
 for line in data_file:
+    i += 1
     nodes.add(line.strip().replace(' ', ''))
+    # if i == 300:
+        # break
 max_spacing = 3
+# print nodes
 print find_num_clust(nodes,num_bits,max_spacing)
