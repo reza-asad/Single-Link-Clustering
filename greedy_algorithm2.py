@@ -3,6 +3,7 @@
 ######################### Algorithms ########################
 from greedy_algorithm import union_find
 import itertools as itr
+
 # A greedy algrithm that finds the max number of clusters in
 # order to have the max-spacing of 2.
 # Note: We assume the input graph is complete.
@@ -13,28 +14,27 @@ def find_num_clust(nodes, num_bits, max_spacing):
         for index in indices:
             list_node = list(node)
             for val in index:
-                if list_node[val] == '0':
-                    list_node[val] = list_node[val].replace('0','1')
-                else:
-                    list_node[val] = list_node[val].replace('1','0')
+                # This change 0 to 1 or 1 to 0 at the val position
+                list_node[val] = str(int(list_node[val]) ^ 1)
             altered = "".join(list_node)
             altered_nodes.append(altered)
         return altered_nodes
     # Convert the binary string to int to save space
+    # Use the union find structure to keep track of the clusters.
     clusters = union_find(dict(zip(map(lambda x: int(x,2),nodes), map(lambda x: int(x,2),nodes))))
-    num_clusters = len(nodes)
     for j in range(1,max_spacing):
         for node in nodes:
             altered_nodes = alter(node,j)
             for altered in altered_nodes:
                 if altered in nodes:
-                    # print 231321312321
+                    # Find the leader of the node and its alteration
                     leader1 = clusters.find(int(node,2))
                     leader2 = clusters.find(int(altered,2))
+                    # If the leaders are different fuse the clusters clusters together.
                     if leader1 != leader2:
                         clusters.fuse(leader1, leader2)
                         
-    return len(set(clusters.node_to_leader.values()))
+    return clusters.num_clusters
 ######################## Main ###############################
 # Preprocess the data
 data_file = open('huge_graph.txt')
@@ -46,8 +46,5 @@ i = 0
 for line in data_file:
     i += 1
     nodes.add(line.strip().replace(' ', ''))
-    # if i == 300:
-        # break
 max_spacing = 3
-# print nodes
 print find_num_clust(nodes,num_bits,max_spacing)
